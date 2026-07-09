@@ -1,9 +1,13 @@
 import os
 from flask import Flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 def create_app(config=None):
     app = Flask(__name__)
+    # Atrás do proxy do EasyPanel (Traefik): respeita X-Forwarded-* para que os
+    # links gerados (share) saiam com o host e o https corretos.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
     app.config["DB_PATH"] = os.environ.get("AGENDAHS_DB", "/app/data/eventos.db")
     app.config["SENHA"] = os.environ.get("AGENDAHS_SENHA")
     app.config["SECRET_KEY"] = os.environ.get("AGENDAHS_SECRET_KEY", "dev-inseguro")
