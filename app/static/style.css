@@ -31,9 +31,9 @@ body {
 }
 
 .container {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 28px 20px 64px;
+  width: min(92%, 1200px);
+  margin-inline: auto;
+  padding: 28px 0 64px;
 }
 
 /* ---------- tipografia ---------- */
@@ -60,7 +60,7 @@ h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; margin: 28px
   padding: 26px;
   margin-top: 16px;
 }
-.card-estreito { max-width: 400px; margin-left: auto; margin-right: auto; }
+.card-estreito { max-width: 420px; margin-inline: auto; }
 .centro { text-align: center; }
 
 /* ---------- topo / navegação ---------- */
@@ -298,7 +298,7 @@ button.link:hover { filter: none; text-decoration: underline; }
 
 /* ---------- responsivo ---------- */
 @media (max-width: 560px) {
-  .container { padding: 18px 14px 48px; }
+  .container { padding: 18px 0 48px; }
   h1 { font-size: 1.6rem; }
   .card { padding: 18px; }
   .cal td { height: 48px; }
