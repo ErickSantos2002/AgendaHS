@@ -142,8 +142,11 @@ anterior é **atualizada** em vez de duplicar.
 ## Tratamento de erros
 - Slug de evento inexistente → página **404 amigável** ("evento não encontrado").
 - Responder sem nome → validação pedindo o nome.
-- Marcar zero datas → **permitido**; registra a pessoa sem nenhuma
-  disponibilidade (significa "nenhuma dessas datas serve").
+- Enviar sem marcar nenhuma data **e** sem marcar "Não tenho disponibilidade" →
+  bloqueado (validação), para evitar respostas vazias. A pessoa precisa marcar
+  ao menos uma data ou declarar explicitamente que não tem disponibilidade.
+- Marcar "Não tenho disponibilidade" → registra a pessoa sem nenhuma data
+  (tem prioridade sobre datas eventualmente marcadas).
 - Senha errada no login → mensagem "senha incorreta".
 - Rotas protegidas acessadas sem sessão → redireciona para o login.
 

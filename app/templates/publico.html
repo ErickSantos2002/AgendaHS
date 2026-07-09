@@ -7,19 +7,25 @@
   {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
   <form method="post" action="{{ url_for('publico.responder', slug=evento['id']) }}">
     <label for="nome">Seu nome</label>
-    <input id="nome" name="nome" required autofocus>
+    <input id="nome" name="nome" required autofocus value="{{ nome|default('') }}">
 
     <p class="label">Quais datas você consegue?</p>
     <ul class="datas-check">
       {% for d in datas %}
       <li>
         <label>
-          <input type="checkbox" name="datas" value="{{ d['id'] }}">
+          <input type="checkbox" name="datas" value="{{ d['id'] }}"
+                 {% if (d['id']|string) in (marcadas|default([])) %}checked{% endif %}>
           {{ d["data"]|data_br }}{% if d["horario"] %} · {{ d["horario"] }}{% endif %}
         </label>
       </li>
       {% endfor %}
     </ul>
+    <label class="sem-disp">
+      <input type="checkbox" id="sem-disponibilidade" name="sem_disponibilidade" value="1"
+             {% if sem_disp|default(false) %}checked{% endif %}>
+      Não tenho disponibilidade nessas datas
+    </label>
     <button type="submit">Enviar resposta</button>
   </form>
 </section>

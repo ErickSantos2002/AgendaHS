@@ -51,9 +51,24 @@ def test_responder_sem_nome_erro(client, app):
     assert "nome" in resp.get_data(as_text=True).lower()
 
 
-def test_responder_zero_datas_permitido(client, app):
+def test_responder_sem_data_e_sem_flag_erro(client, app):
     slug, _ = _criar_evento_com_datas(client, app)
     resp = client.post(f"/e/{slug}/responder", data={"nome": "Ana"})
+    assert resp.status_code == 400
+    assert "pelo menos uma data" in resp.get_data(as_text=True).lower()
+    with app.app_context():
+        db = get_db()
+        n = db.execute(
+            "SELECT COUNT(*) c FROM participante WHERE nome='Ana'"
+        ).fetchone()["c"]
+        assert n == 0  # não registra resposta vazia
+
+
+def test_responder_sem_disponibilidade_ok(client, app):
+    slug, _ = _criar_evento_com_datas(client, app)
+    resp = client.post(f"/e/{slug}/responder", data={
+        "nome": "Ana", "sem_disponibilidade": "1",
+    })
     assert resp.status_code == 200
     with app.app_context():
         db = get_db()
@@ -63,6 +78,21 @@ def test_responder_zero_datas_permitido(client, app):
             "SELECT COUNT(*) c FROM participante_data WHERE participante_id=?", (p["id"],)
         ).fetchone()["c"]
         assert n == 0
+
+
+def test_sem_disponibilidade_ignora_datas_marcadas(client, app):
+    slug, datas = _criar_evento_com_datas(client, app)
+    resp = client.post(f"/e/{slug}/responder", data={
+        "nome": "Ana", "sem_disponibilidade": "1", "datas": [str(datas[0])],
+    })
+    assert resp.status_code == 200
+    with app.app_context():
+        db = get_db()
+        p = db.execute("SELECT * FROM participante WHERE nome='Ana'").fetchone()
+        n = db.execute(
+            "SELECT COUNT(*) c FROM participante_data WHERE participante_id=?", (p["id"],)
+        ).fetchone()["c"]
+        assert n == 0  # "sem disponibilidade" tem prioridade
 
 
 def test_responder_mesmo_nome_atualiza(client, app):

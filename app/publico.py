@@ -26,12 +26,23 @@ def responder_form(slug):
 def responder(slug):
     evento, datas = _buscar_evento(slug)
     nome = (request.form.get("nome") or "").strip()
-    if not nome:
-        return render_template(
-            "publico.html", evento=evento, datas=datas, erro="Informe seu nome."
-        ), 400
+    sem_disp = bool(request.form.get("sem_disponibilidade"))
     ids_validos = {str(d["id"]) for d in datas}
-    escolhidas = [int(x) for x in request.form.getlist("datas") if x in ids_validos]
+    marcadas = [x for x in request.form.getlist("datas") if x in ids_validos]
+
+    erro = None
+    if not nome:
+        erro = "Informe seu nome."
+    elif not sem_disp and not marcadas:
+        erro = "Marque pelo menos uma data, ou 'Não tenho disponibilidade'."
+    if erro:
+        return render_template(
+            "publico.html", evento=evento, datas=datas, erro=erro,
+            nome=nome, marcadas=marcadas, sem_disp=sem_disp,
+        ), 400
+
+    # "Não tenho disponibilidade" tem prioridade: registra sem nenhuma data.
+    escolhidas = [] if sem_disp else [int(x) for x in marcadas]
 
     db = get_db()
     existente = db.execute(

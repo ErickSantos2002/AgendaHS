@@ -12,6 +12,24 @@ document.querySelectorAll(".copiar").forEach((btn) => {
   });
 });
 
+// "Não tenho disponibilidade": desmarca e desabilita as datas quando ativo
+const semDisp = document.getElementById("sem-disponibilidade");
+if (semDisp) {
+  const dateBoxes = document.querySelectorAll('.datas-check input[type="checkbox"]');
+  const sync = () => {
+    dateBoxes.forEach((b) => {
+      if (semDisp.checked) {
+        b.checked = false;
+        b.disabled = true;
+      } else {
+        b.disabled = false;
+      }
+    });
+  };
+  semDisp.addEventListener("change", sync);
+  sync();
+}
+
 // Adicionar novas linhas de data no formulário de criar evento
 const addBtn = document.getElementById("add-data");
 if (addBtn) {

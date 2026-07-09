@@ -163,6 +163,32 @@ button.link:hover { filter: none; text-decoration: underline; }
   background: var(--green-soft);
 }
 
+/* opção "não tenho disponibilidade" — separada e discreta */
+label.sem-disp {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  cursor: pointer;
+}
+label.sem-disp input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--erro);
+  flex: none;
+}
+label.sem-disp:has(input:checked) {
+  border-style: solid;
+  border-color: var(--erro);
+  color: var(--text);
+}
+
 /* ---------- flash ---------- */
 .flash {
   background: var(--gold-soft);
