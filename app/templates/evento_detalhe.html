@@ -21,8 +21,8 @@
           <th>Pessoa</th>
           {% for d in datas %}
           <th class="{{ 'melhor' if d['id'] == melhor_data_id }}">
-            {{ d["data"] }}{% if d["horario"] %}<br><small>{{ d["horario"] }}</small>{% endif %}
-            <br><small>{{ contagem[d["id"]] }}</small>
+            {{ d["data"]|data_br }}{% if d["horario"] %}<br><small>{{ d["horario"] }}</small>{% endif %}
+            <br><small>{{ contagem[d["id"]] }} {{ 'pessoa' if contagem[d["id"]] == 1 else 'pessoas' }}</small>
           </th>
           {% endfor %}
         </tr>

@@ -25,6 +25,17 @@ def create_app(config=None):
     app.register_blueprint(eventos.bp)
     app.register_blueprint(publico.bp)
 
+    from datetime import date as _date
+    _DIAS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
+
+    @app.template_filter("data_br")
+    def data_br(iso):
+        try:
+            d = _date.fromisoformat(iso)
+        except (ValueError, TypeError):
+            return iso
+        return f"{_DIAS[d.weekday()]} {d.day:02d}/{d.month:02d}"
+
     from flask import render_template
 
     @app.errorhandler(404)

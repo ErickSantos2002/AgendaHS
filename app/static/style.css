@@ -1,0 +1,313 @@
+/* AgendaHS — tema escuro quente, dourado com parcimônia, verde para consenso */
+:root {
+  --bg: #14120f;
+  --surface: #1e1b16;
+  --surface-2: #26221b;
+  --line: #332e25;
+  --text: #f2ede3;
+  --muted: #a99f8c;
+  --gold: #e0a730;
+  --gold-ink: #14120f;
+  --gold-soft: rgba(224, 167, 48, 0.14);
+  --green: #6fbf73;
+  --green-soft: rgba(111, 191, 115, 0.16);
+  --erro: #e8836b;
+  --radius: 14px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+/* ---------- tipografia ---------- */
+h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 4px; }
+h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; margin: 28px 0 12px; }
+.sub { color: var(--muted); margin: 0 0 8px; }
+.label {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin: 18px 0 8px;
+}
+.meta { color: var(--muted); font-size: 0.85rem; }
+.vazio { color: var(--muted); font-style: italic; }
+.erro { color: var(--erro); font-weight: 600; margin: 6px 0 12px; }
+
+/* ---------- cartões ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+  margin-top: 16px;
+}
+.card-estreito { max-width: 400px; margin-left: auto; margin-right: auto; }
+.centro { text-align: center; }
+
+/* ---------- topo / navegação ---------- */
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.topo h1 { margin: 0; }
+.voltar {
+  display: inline-block;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+.voltar:hover { color: var(--text); }
+
+/* ---------- formulários ---------- */
+label { display: block; font-weight: 600; margin: 16px 0 6px; }
+input[type="text"], input[type="password"], input[type="date"],
+input[type="time"], input:not([type]), textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 13px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  font: inherit;
+}
+input[type="date"], input[type="time"] { color-scheme: dark; }
+textarea { min-height: 64px; resize: vertical; }
+input:focus, textarea:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+button, .botao {
+  display: inline-block;
+  min-height: 46px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: var(--gold);
+  color: var(--gold-ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+button:hover, .botao:hover { filter: brightness(1.08); }
+form > button[type="submit"] { margin-top: 22px; width: 100%; }
+
+/* botão-texto discreto (sair, adicionar data) */
+button.link, .link {
+  background: none;
+  color: var(--gold);
+  min-height: auto;
+  padding: 6px 2px;
+  font-weight: 600;
+  border: none;
+}
+button.link:hover { filter: none; text-decoration: underline; }
+
+.linha-data {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.linha-data input[type="date"] { flex: 2; }
+.linha-data input[type="time"] { flex: 1; min-width: 96px; }
+
+/* checkboxes de datas na página pública */
+.datas-check { list-style: none; padding: 0; margin: 0 0 8px; }
+.datas-check li { margin: 0; }
+.datas-check label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin: 8px 0 0;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.datas-check input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--green);
+  flex: none;
+}
+.datas-check label:has(input:checked) {
+  border-color: var(--green);
+  background: var(--green-soft);
+}
+
+/* ---------- flash ---------- */
+.flash {
+  background: var(--gold-soft);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+}
+.flash p { margin: 4px 0; }
+
+/* ---------- link de compartilhar ---------- */
+.link-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 4px;
+  padding: 14px;
+  background: var(--surface-2);
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+}
+.link-box span { color: var(--muted); font-size: 0.85rem; width: 100%; }
+.link-box input {
+  flex: 1;
+  min-width: 180px;
+  min-height: 40px;
+  font-size: 0.85rem;
+}
+.link-box .copiar { min-height: 40px; padding: 8px 16px; }
+
+/* ---------- lista de eventos ---------- */
+.lista ul { list-style: none; padding: 0; margin: 0; }
+.lista li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.lista li a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.lista li a:hover { color: var(--gold); }
+
+/* ---------- grade de disponibilidade (assinatura) ---------- */
+.tabela-scroll { overflow-x: auto; margin: 4px -4px 0; padding: 0 4px; }
+.grade {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 380px;
+  font-size: 0.92rem;
+}
+.grade th, .grade td {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: center;
+}
+.grade thead th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.grade thead th:first-child, .grade tbody td:first-child {
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.grade th.melhor {
+  color: var(--gold-ink);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.grade td.sim { background: var(--green-soft); color: var(--green); font-weight: 700; }
+.grade td.nao { color: var(--line); }
+
+/* ---------- calendário ---------- */
+.calendario { margin-top: 22px; }
+.cal-topo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+.cal-topo strong { min-width: 180px; text-align: center; font-size: 1.05rem; }
+.cal-topo a {
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.cal-topo a:hover { background: var(--gold-soft); }
+
+.cal { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.cal thead th {
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding: 6px 0;
+}
+.cal td {
+  border: 1px solid var(--line);
+  height: 62px;
+  vertical-align: top;
+  padding: 4px;
+  position: relative;
+}
+.cal td .num { font-size: 0.8rem; color: var(--muted); }
+.cal td.tem-evento { background: var(--gold-soft); }
+.cal td.tem-evento .num { color: var(--gold); font-weight: 700; }
+.cal-ev {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  color: var(--gold);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-ev:hover { text-decoration: underline; }
+
+/* ---------- responsivo ---------- */
+@media (max-width: 560px) {
+  .container { padding: 18px 14px 48px; }
+  h1 { font-size: 1.6rem; }
+  .card { padding: 18px; }
+  .cal td { height: 48px; }
+  .cal-ev { font-size: 0; }        /* no celular, vira só um bloco de cor */
+  .cal-ev::before { content: "•"; font-size: 0.9rem; }
+}
+
+/* ---------- acessibilidade ---------- */
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

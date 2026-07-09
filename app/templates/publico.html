@@ -15,7 +15,7 @@
       <li>
         <label>
           <input type="checkbox" name="datas" value="{{ d['id'] }}">
-          {{ d["data"] }}{% if d["horario"] %} · {{ d["horario"] }}{% endif %}
+          {{ d["data"]|data_br }}{% if d["horario"] %} · {{ d["horario"] }}{% endif %}
         </label>
       </li>
       {% endfor %}
