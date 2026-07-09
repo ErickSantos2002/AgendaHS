@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ evento["titulo"] }}{% endblock %}
+{% block conteudo %}
+<section class="card">
+  <h1>{{ evento["titulo"] }}</h1>
+  {% if evento["descricao"] %}<p class="sub">{{ evento["descricao"] }}</p>{% endif %}
+  {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
+  <form method="post" action="{{ url_for('publico.responder', slug=evento['id']) }}">
+    <label for="nome">Seu nome</label>
+    <input id="nome" name="nome" required autofocus>
+
+    <p class="label">Quais datas você consegue?</p>
+    <ul class="datas-check">
+      {% for d in datas %}
+      <li>
+        <label>
+          <input type="checkbox" name="datas" value="{{ d['id'] }}">
+          {{ d["data"] }}{% if d["horario"] %} · {{ d["horario"] }}{% endif %}
+        </label>
+      </li>
+      {% endfor %}
+    </ul>
+    <button type="submit">Enviar resposta</button>
+  </form>
+</section>
+{% endblock %}
