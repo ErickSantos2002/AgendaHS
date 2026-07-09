@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Novo evento — AgendaHS{% endblock %}
+{% block conteudo %}
+<a class="voltar" href="{{ url_for('eventos.painel') }}">‹ voltar</a>
+<section class="card">
+  <h1>Criar evento</h1>
+  {% if erro %}<p class="erro">{{ erro }}</p>{% endif %}
+  <form method="post" action="{{ url_for('eventos.criar') }}">
+    <label for="titulo">Título</label>
+    <input id="titulo" name="titulo" required>
+
+    <label for="descricao">Descrição (opcional)</label>
+    <textarea id="descricao" name="descricao" rows="2"></textarea>
+
+    <label>Datas candidatas</label>
+    <div id="datas">
+      <div class="linha-data">
+        <input type="date" name="data" required>
+        <input type="time" name="horario">
+      </div>
+    </div>
+    <button type="button" id="add-data" class="link">+ adicionar data</button>
+
+    <button type="submit">Criar evento</button>
+  </form>
+</section>
+{% endblock %}

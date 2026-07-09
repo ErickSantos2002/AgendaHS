@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ evento["titulo"] }} — AgendaHS{% endblock %}
+{% block conteudo %}
+<a class="voltar" href="{{ url_for('eventos.painel') }}">‹ voltar</a>
+<section class="card">
+  <h1>{{ evento["titulo"] }}</h1>
+  {% if evento["descricao"] %}<p class="sub">{{ evento["descricao"] }}</p>{% endif %}
+
+  <div class="link-box">
+    <span>Link para compartilhar:</span>
+    <input id="link-publico" readonly value="{{ link_publico }}">
+    <button type="button" class="copiar" data-alvo="link-publico">copiar</button>
+  </div>
+
+  <h2>Disponibilidade</h2>
+  {% if participantes %}
+  <div class="tabela-scroll">
+    <table class="grade">
+      <thead>
+        <tr>
+          <th>Pessoa</th>
+          {% for d in datas %}
+          <th class="{{ 'melhor' if d['id'] == melhor_data_id }}">
+            {{ d["data"] }}{% if d["horario"] %}<br><small>{{ d["horario"] }}</small>{% endif %}
+            <br><small>{{ contagem[d["id"]] }}</small>
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in participantes %}
+        <tr>
+          <td>{{ p["nome"] }}</td>
+          {% for d in datas %}
+          <td class="{{ 'sim' if d['id'] in p['disponibilidades'] else 'nao' }}">
+            {{ '✓' if d['id'] in p['disponibilidades'] else '' }}
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="vazio">Ninguém respondeu ainda. Compartilhe o link acima.</p>
+  {% endif %}
+</section>
+{% endblock %}

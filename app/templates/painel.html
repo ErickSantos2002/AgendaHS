@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Painel — AgendaHS{% endblock %}
+{% block conteudo %}
+<header class="topo">
+  <h1>AgendaHS</h1>
+  <form method="post" action="{{ url_for('auth.logout') }}">
+    <button class="link" type="submit">sair</button>
+  </form>
+</header>
+<a class="botao" href="{{ url_for('eventos.novo') }}">+ Criar evento</a>
+{% block calendario %}{% endblock %}
+<section class="lista">
+  <h2>Eventos</h2>
+  {% if eventos %}
+  <ul>
+    {% for e in eventos %}
+    <li>
+      <a href="{{ url_for('eventos.detalhe', slug=e['id']) }}">{{ e["titulo"] }}</a>
+      <span class="meta">{{ e["n_datas"] }} datas · {{ e["n_respostas"] }} respostas</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="vazio">Nenhum evento ainda. Crie o primeiro!</p>
+  {% endif %}
+</section>
+{% endblock %}

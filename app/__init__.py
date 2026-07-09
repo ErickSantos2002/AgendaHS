@@ -15,6 +15,22 @@ def create_app(config=None):
     from . import db
     db.init_app(app)
 
+    if not app.config.get("SENHA"):
+        raise RuntimeError(
+            "AGENDAHS_SENHA não configurada — painel ficaria sem proteção"
+        )
+
+    from . import auth, eventos, publico
+    app.register_blueprint(auth.bp)
+    app.register_blueprint(eventos.bp)
+    app.register_blueprint(publico.bp)
+
+    from flask import render_template
+
+    @app.errorhandler(404)
+    def nao_encontrado(e):
+        return render_template("404.html"), 404
+
     @app.route("/health")
     def health():
         return "ok"
