@@ -10,6 +10,11 @@ def create_app(config=None):
     if config:
         app.config.update(config)
 
+    os.makedirs(os.path.dirname(os.path.abspath(app.config["DB_PATH"])), exist_ok=True)
+
+    from . import db
+    db.init_app(app)
+
     @app.route("/health")
     def health():
         return "ok"
