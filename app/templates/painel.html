@@ -8,7 +8,34 @@
   </form>
 </header>
 <a class="botao" href="{{ url_for('eventos.novo') }}">+ Criar evento</a>
-{% block calendario %}{% endblock %}
+<section class="calendario">
+  <div class="cal-topo">
+    <a href="{{ url_for('eventos.painel', ano=cal['mes_anterior'][0], mes=cal['mes_anterior'][1]) }}">‹</a>
+    <strong>{{ cal["nome_mes"] }} {{ cal["ano"] }}</strong>
+    <a href="{{ url_for('eventos.painel', ano=cal['mes_proximo'][0], mes=cal['mes_proximo'][1]) }}">›</a>
+  </div>
+  <table class="cal">
+    <thead>
+      <tr><th>Dom</th><th>Seg</th><th>Ter</th><th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th></tr>
+    </thead>
+    <tbody>
+      {% for semana in cal["semanas"] %}
+      <tr>
+        {% for celula in semana %}
+        <td class="{{ 'tem-evento' if celula['eventos'] else '' }}">
+          {% if celula["dia"] %}
+            <span class="num">{{ celula["dia"] }}</span>
+            {% for ev in celula["eventos"] %}
+              <a class="cal-ev" href="{{ url_for('eventos.detalhe', slug=ev['evento_id']) }}">{{ ev["titulo"] }}</a>
+            {% endfor %}
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
 <section class="lista">
   <h2>Eventos</h2>
   {% if eventos %}

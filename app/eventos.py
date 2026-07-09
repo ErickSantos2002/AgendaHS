@@ -1,4 +1,5 @@
-from datetime import datetime
+import calendar
+from datetime import datetime, date
 from flask import (
     Blueprint, render_template, request, redirect, url_for
 )
@@ -7,6 +8,38 @@ from .slug import gerar_slug
 from .auth import login_required
 
 bp = Blueprint("eventos", __name__)
+
+_MESES = ["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+          "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+
+
+def dados_calendario(ano, mes):
+    db = get_db()
+    prefixo = f"{ano:04d}-{mes:02d}-"
+    linhas = db.execute("""
+        SELECT d.data AS data, e.id AS evento_id, e.titulo AS titulo
+        FROM evento_data d JOIN evento e ON e.id = d.evento_id
+        WHERE d.data LIKE ?
+    """, (prefixo + "%",)).fetchall()
+    por_dia = {}
+    for row in linhas:
+        dia = int(row["data"][8:10])
+        por_dia.setdefault(dia, []).append(row)
+
+    cal = calendar.Calendar(firstweekday=6)  # domingo primeiro
+    semanas = []
+    for semana in cal.monthdayscalendar(ano, mes):
+        semanas.append([
+            {"dia": (d or None), "eventos": por_dia.get(d, []) if d else []}
+            for d in semana
+        ])
+    mes_anterior = (ano - 1, 12) if mes == 1 else (ano, mes - 1)
+    mes_proximo = (ano + 1, 1) if mes == 12 else (ano, mes + 1)
+    return {
+        "ano": ano, "mes": mes, "semanas": semanas,
+        "mes_anterior": mes_anterior, "mes_proximo": mes_proximo,
+        "nome_mes": _MESES[mes],
+    }
 
 
 def criar_evento(titulo, descricao, datas):
@@ -65,6 +98,14 @@ def resumo_evento(slug):
 @bp.route("/painel")
 @login_required
 def painel():
+    hoje = date.today()
+    try:
+        ano = int(request.args.get("ano", hoje.year))
+        mes = int(request.args.get("mes", hoje.month))
+        if not (1 <= mes <= 12):
+            raise ValueError
+    except (TypeError, ValueError):
+        ano, mes = hoje.year, hoje.month
     db = get_db()
     eventos = db.execute("""
         SELECT e.id, e.titulo, e.criado_em,
@@ -72,7 +113,8 @@ def painel():
                (SELECT COUNT(*) FROM participante p WHERE p.evento_id=e.id) n_respostas
         FROM evento e ORDER BY e.criado_em DESC
     """).fetchall()
-    return render_template("painel.html", eventos=eventos)
+    cal = dados_calendario(ano, mes)
+    return render_template("painel.html", eventos=eventos, cal=cal)
 
 
 @bp.route("/eventos/novo")

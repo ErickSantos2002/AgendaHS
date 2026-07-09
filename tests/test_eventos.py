@@ -76,3 +76,21 @@ def test_detalhe_evento_inexistente_404(client):
     _login(client)
     resp = client.get("/eventos/naoexiste")
     assert resp.status_code == 404
+
+
+def test_calendario_marca_dia_do_evento(client):
+    _login(client)
+    client.post("/eventos", data={
+        "titulo": "Festa", "descricao": "",
+        "data": ["2026-08-15"], "horario": [""],
+    })
+    resp = client.get("/painel?ano=2026&mes=8")
+    texto = resp.get_data(as_text=True)
+    assert "tem-evento" in texto
+    assert "Festa" in texto
+
+
+def test_404_pagina_amigavel(client):
+    resp = client.get("/rota/que/nao/existe")
+    assert resp.status_code == 404
+    assert "não encontrad" in resp.get_data(as_text=True).lower()
