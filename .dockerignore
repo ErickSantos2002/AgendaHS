@@ -1,8 +1,12 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+.git/
+.gitignore
+tests/
 *.db
 data/
 .venv/
 venv/
+docs/
 .playwright-mcp/
